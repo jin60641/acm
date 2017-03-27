@@ -1,0 +1,57 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+using namespace std;
+
+int N; 
+int A[1000001];
+
+int swap(int, int); 
+
+int cut(int left,int pivot){ 
+    printf("list : ");
+	for( int i = left; i <= pivot; ++i ){
+    	printf("%d ",A[i]);
+    }
+    printf("\n");
+	
+	if( left == pivot ){
+		return 0;
+	}
+	int right = pivot-1;
+	for( int j = right; j >= 0; --j ){
+		for( int i = left; i <= j; ++i ){
+			if( i == j ){
+				if( A[i] > A[pivot] ){
+					swap(i,pivot);
+				}
+				cut(0,pivot-1);
+				cut(pivot+1,right);
+				break;
+			} else if( A[i] > A[pivot] && A[j] < A[pivot] ){
+				swap(i,j);
+			}
+		}
+	}
+}
+
+int swap(int left,int right){
+	int tmp = A[left];
+	A[left] = A[right];
+	A[right] = tmp;
+	return 0;
+}
+
+int main(){
+	scanf("%d",&N);
+	for( int i = 0; i < N; ++i ){
+		scanf("%d",&A[i]);
+	}
+	
+	cut(0,N-1);
+	for( int i = 0; i < N; ++i ){
+    	printf("%d ",A[i]);
+    }
+    printf("\n");
+	return 0;
+}
