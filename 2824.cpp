@@ -1,65 +1,68 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include<map>
 using namespace std;
 
 int main(){
-	long long int last = 1000000000;
-	int *A;
-	A = (int*)malloc(sizeof(int)*(last+10));
-	int *P;
-	P = (int*)malloc(sizeof(int)*(last+10));
-	int cnt = 0;
-	for( int i = 0; i < last-2; ++i ){
-		if(A[i] == 1){
-			continue;
-		}
-		int Amin = i+2;
-		P[cnt] = Amin;
-		cnt++;
-		for( long long int j = (long long int)Amin*(long long int)Amin; j < last; j += Amin ){
-			A[j-2] = 1;
-		}	
-	}
-
 	int N, M;
 	int *np;
-	int result = 1;
-	np = (int*)malloc(sizeof(int)*(last+10));
+	int *mp;
+	int flag = 0;
+	long long int result = 1;
+	map<int,int> mymap;
+
 	scanf("%d",&N);
-	
 	for( int i = 0; i < N; ++i ){
 		int n;
 		scanf("%d",&n);
-		while(n!=1){
-			for( int i = 0; i < cnt; ++i ){
-				if( n%P[i] == 0 ){
-					np[P[i]-1]++;
-					n/=P[i];
-					break;
-				}
+		
+		int tmp = n;
+		for( int i = 2; i*i <= n; ++i ){
+			while( tmp%i == 0 ){
+				mymap[i]++;
+				tmp /= i;
 			}
 		}
+		if( tmp != 1 ){
+			mymap[tmp]++;
+		}
 	}
-	scanf("%d",&M);
 
+	scanf("%d",&M);
 	for( int i = 0; i < M; ++i ){
 		int n;
 		scanf("%d",&n);
-		while(n!=1){
-			for( int i = 0; i < cnt; ++i ){
-				if( n%P[i] == 0 ){
-					if( np[P[i]-1] >= 1 ){
-						np[P[i]-1]--;
-						result*=P[i];
+		
+		int tmp = n;
+		for( int i = 2; i*i <= n; ++i ){
+			while( tmp%i == 0 ){
+				if( mymap[i] > 0 ){
+					mymap[i]--;
+					result *= i;
+					if( result > 1000000000 ){
+						result = result%1000000000;
+						flag = 1;
 					}
-					n/=P[i];
-					break;
 				}
+				tmp /= i;
+			}
+		}
+		if( tmp != 1 && mymap[tmp] > 0 ){
+			result *= tmp;
+			if( result > 1000000000 ){
+				result = result%1000000000;
+				flag = 1;
 			}
 		}
 	}
-	printf("%d\n",result);
+
+	if( flag == 1 ){
+		printf("%010lld\n",result);
+	} else {
+		printf("%lld\n",result);
+	}
 	return 0;
 }
+
 

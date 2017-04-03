@@ -18,6 +18,7 @@ int main(){
 		}	
 	}
 
+
 	while(true){
 		scanf("%d",&n);
 		if( n == 0 ){
