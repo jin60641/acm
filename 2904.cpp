@@ -1,59 +1,50 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include<map>
 using namespace std;
 
 int main(){
-	long long int last = 1000000;
-	int *A;
-	A = (int*)malloc(sizeof(int)*(last+10));
-	int *P;
-	P = (int*)malloc(sizeof(int)*(last+10));
-	int cnt = 0;
-	for( int i = 0; i < last-2; ++i ){
-		if(A[i] == 1){
-			continue;
-		}
-		int Amin = i+2;
-		P[cnt] = Amin;
-		cnt++;
-		for( long long int j = (long long int)Amin*(long long int)Amin; j < last; j += Amin ){
-			A[j-2] = 1;
-		}	
-	}
-
 	int N, M;
 	int *np;
-	int end = 0;
-	np = (int*)malloc(sizeof(int)*(last+10));
+	int *mp;
+	long long int result = 1;
 
 	scanf("%d",&N);
-	
+	map<int,int> mymap[N];
+	map<int,int> mymap2;
+	map<int,int>::iterator mymap2;
 	for( int i = 0; i < N; ++i ){
 		int n;
 		scanf("%d",&n);
-		while(n!=1){
-			for( int i = 0; i < cnt; ++i ){
-				if( n%P[i] == 0 ){
-					np[P[i]-1]++;
-					if( end < P[i] ){
-						end = P[i];
-					}
-					n/=P[i];
-					break;
-				}
+		
+		int tmp = n;
+		for( int j = 2; j*j <= n; ++j ){
+			while( tmp%j == 0 ){
+				mymap[i][j]++;
+				mymap2[j]++;
+				tmp /= j;
 			}
 		}
-	}
-
-	int result = 1;
-	for( int i = 0; i < end; ++i ){
-		int npi = np[P[i]-1];
-		if( npi != 0 && npi/N >= 1 ){
-			result = result * npi/N * P[i];
+		if( tmp != 1 ){
+			mymap[i][tmp]++;
+			mymap2[tmp]++;
 		}
 	}
-	printf("%d\n",result);
+	
+	for( int i = mymap2.begin() ; i != mymap2.end(); ++i  ){
+		long long int a = e.second/N;
+		if( a >= 1 ){
+			result *= e.second*a;
+		}
+	}
+	for( int i = 0; i < N; ++i ){
+		for( auto& e : mymap[i] ){
+		}
+	}
+	printf("%lld",result);
+	
 	return 0;
 }
+
 
