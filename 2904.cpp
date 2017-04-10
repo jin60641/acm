@@ -4,22 +4,21 @@
 #include<map>
 using namespace std;
 
+map<long long int,long long int> mymap[105];
+map<long long int,long long int> mymap2;
+
 int main(){
-	int N, M;
-	int *np;
-	int *mp;
+	int N;
+	long long int cnt = 0;
 	long long int result = 1;
 
 	scanf("%d",&N);
-	map<int,int> mymap[N];
-	map<int,int> mymap2;
-	map<int,int>::iterator mymap2;
 	for( int i = 0; i < N; ++i ){
-		int n;
+		long long int n;
 		scanf("%d",&n);
 		
-		int tmp = n;
-		for( int j = 2; j*j <= n; ++j ){
+		long long int tmp = n;
+		for( long long int j = 2; j*j <= n; ++j ){
 			while( tmp%j == 0 ){
 				mymap[i][j]++;
 				mymap2[j]++;
@@ -31,18 +30,22 @@ int main(){
 			mymap2[tmp]++;
 		}
 	}
-	
-	for( int i = mymap2.begin() ; i != mymap2.end(); ++i  ){
-		long long int a = e.second/N;
-		if( a >= 1 ){
-			result *= e.second*a;
+
+	for( map<long long int,long long int>::iterator it = mymap2.begin(); it != mymap2.end(); ++it ){	
+		long long int num = it->first;
+		long long int avg = it->second/N;
+		if( it->second >= N ){
+			for( int i = 0; i < avg; ++i ){
+				result *= num;
+			}
+		}
+		for( long long int i = 0; i < N; ++i ){
+			if( mymap[i][num] < avg ){
+				cnt += avg - mymap[i][num];
+			}
 		}
 	}
-	for( int i = 0; i < N; ++i ){
-		for( auto& e : mymap[i] ){
-		}
-	}
-	printf("%lld",result);
+	printf("%lld %lld",result,cnt);
 	
 	return 0;
 }
