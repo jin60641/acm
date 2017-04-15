@@ -14,9 +14,7 @@ int clearArr(){
 }
 
 int search(int index,int depth,int j){
-	printf("cnt : %d / index : %d / arr[index] : %d / depth : %d\n",cnt,index+1,arr[index]+1,depth);
 	if( index == target ){
-		printf("TARGET\n");
 		cnt -= depth;
 		return -1;
 	} else if( checked[index] != -1 ){
@@ -28,7 +26,6 @@ int search(int index,int depth,int j){
 	} else {
 		checked[index] = j;
 		int a = search(arr[index],depth+1,j);
-		printf("cnt : %d / a : %d / index : %d\n",cnt,a+1,index+1);
 		if( a == -1 ) {
 			return -1;
 		} else {
@@ -55,14 +52,13 @@ int main(){
 			arr[j] = num-1; 
 		}
 		for( int j = 0; j < N; ++j ){
-			printf("j : %d\n",j+1);
 			if( checked[j] == -1 ){
 				checked[j] = j;
 				target = j;
 				search(arr[j],1,j);
 			}
 		}
-		printf("!!cnt : %d\n",cnt);
+		printf("%d\n",cnt);
 	}
 	return 0;
 }
