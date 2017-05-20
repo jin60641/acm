@@ -7,13 +7,13 @@ int main(){
 	for( int i = 2; i < 1120; ++i ){
 		if( check[i] == 1 ){
 			continue;
-		} 
+		}
 		a[p++] = i;
 		for( int j = i*2; j < 1120; j += i ){
 			check[j] = 1;
 		}
 	}
-	
+
 	int T;
 	scanf("%d",&T);
 	while( T > 0 ){
@@ -40,3 +40,4 @@ int main(){
 	}
 	return 0;
 }
+
