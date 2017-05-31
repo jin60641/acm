@@ -1,26 +1,15 @@
 #include<stdio.h>
-#include<algorithm>
-using namespace std;
-
-
-struct weight {
-	int index;
-	int value;
-};
-
-
-bool cmp(weight a, weight b) { return a.value>b.value; }
 
 int edge[500000];
+int weight[500000];
+int tmp[100000];
 
 int main(){
-	struct weight w[500000];
 	int N;
 	scanf("%d",&N);
 	int cnt = 0;
 	
 	for( int i = 0; i < 500000; ++i ){
-		w[i].index = i;
 		edge[i] = -1;
 	}
 
@@ -28,44 +17,28 @@ int main(){
 		int start, end;
 		scanf("%d %d",&start,&end);
 		edge[start] = end;
-		for( int j = 0; j < N; ++j ){
-			if( start == j ){
+		tmp[i] = start;
+		for( int j = 0; j < i; ++j ){
+			if( edge[tmp[j]] == -1 || start == j ){
 				continue;
-			} else if( ( j > start && edge[j] < end ) || ( j < start && edge[j] > end ) ){
-				w[i].value++;
-				w[j].value++;
+			} else if( ( j > start && edge[tmp[j]] < end ) || ( j < start && edge[tmp[j]] > end ) ){
+				weight[i]++;
+				weight[tmp[j]]++;
 				cnt+=2;
 			}
 		}
 	}
-	/*
-	printf("\n");
-	for( int i = 0; i < N; ++i ){
-		printf("%d ",w[i].index);
-	}
-	printf("\n");
-	for( int i = 0; i < N; ++i ){
-		printf("%d ",w[i].value);
-	}
-	printf("\n");
-	*/
-	sort(w,w+N,cmp);
-	/*
-	for( int i = 0; i < N; ++i ){
-		printf("%d ",w[i].index);
-	}
-	printf("\n");
-	for( int i = 0; i < N; ++i ){
-		printf("%d ",w[i].value);
-	}
-	printf("\n");
-	*/
-	printf("%d",cnt);
-	int index = 0;
 	while( cnt != 0 ){
-		for( int i = 0; i < ; ++i ){
+		int max = -1;
+		int max_index;
+		for( int i = 0; i < N; ++i ){
+			if( weight[tmp[i]] > max ){
+				max = weight[tmp[i]];
+				max_index = tmp[i];
+			}
 		}
+		for( int i = max_index+1; 
+		break;
 	}
-	
 	return 0;
 }
