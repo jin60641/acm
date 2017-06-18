@@ -1,9 +1,9 @@
 #include<stdio.h>
-#include<algorithm>
 
-int top[100000];
-int bottom[100000];
-int cnt[500000];
+int top[500001];
+int bottom[500001];
+int min = 1000000;
+int min_cnt=0;
 
 int main(){
 	int N,H;
@@ -13,36 +13,25 @@ int main(){
 		int a;
 		scanf("%d",&a);
 		if( flag == 1 ){
-			bottom[i/2] = a;
+			bottom[a]++;
 			flag = 0;
 		} else {
-			top[i/2] = a;
+			top[a]++;
 			flag = 1;
 		}
 	}
-	std::sort(bottom,bottom+N/2);
-	std::sort(top,top+N/2);
-	for( int i = 0; i < N/2; ++i ){
-//		cnt[H-top[i]] += i;
-		cnt[H-bottom[i]] += i;
+	for( int i = H-1; i >= 1; --i ){
+		top[i] += top[i+1];
+		bottom[i] += bottom[i+1];
 	}
-	std::sort(cnt,cnt+H);
-
-	int left = 0;
-	int right = H-1;
-	int mid;
-	//printf("%d ",cnt[0]);
-	while( left <= right ){
-		mid = (left+right)/2;
-		if( cnt[mid] > cnt[0] ){
-			right = mid-1;
-		} else {
-			left = mid+1;
+	for( int i = 1; i <= H; ++i ){
+		int sum = top[H-i+1] + bottom[i];
+		if( sum < min ){
+			min = sum;
+			min_cnt = 1;
+		} else if( sum == min ){
+			++min_cnt;
 		}
 	}
-	printf("\n%d\n",left);
-	for( int i = 0; i < H; ++i ) {
-		printf("%d ",cnt[i]);
-	}
-	printf("\n");
+	printf("%d %d\n",min,min_cnt);
 }
