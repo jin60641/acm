@@ -18,7 +18,7 @@ int f( int parent ){
 	int max = 0; 
 	int max2 = 0; // max2 is bigger than max
 	for( vector<edge>::iterator i = v->begin(); i != v->end(); ++i ){
-		int result = f( (*i).value ) + (*i).weight;
+		int result = f( i->value ) + i->weight;
 		if( result > max2 ){
 			max = max2;
 			max2 = result;
