@@ -1,14 +1,13 @@
 #include<stdio.h>
-
 int main(){
-    int N;
-    scanf("%d",&N);
+    long long int N;
+    scanf("%lld",&N);
     long long int tot = 0;
-    int num[10000];
-    int left = 100001;
-    int right = 0;
-    for( int i = 0; i < N; ++i ){
-        scanf("%d",&num[i]);
+    long long int num[10000];
+    long long int left = 100001;
+    long long int right = 0;
+    for( long long int i = 0; i < N; ++i ){
+        scanf("%lld",&num[i]);
         if( num[i] > right ){
             right = num[i];
         }
@@ -17,14 +16,13 @@ int main(){
         }
         tot += num[i];
     }
-    int mid;
-    int M;
-    scanf("%d",&M);
-	int max = 0;
+    long long int mid;
+    long long int M;
+    scanf("%lld",&M);
     while( left <= right ){
         long long int sum = 0;
         mid = (left+right)/2;
-        for( int i = 0; i < N; ++i ){
+        for( long long int i = 0; i < N; ++i ){
             if( num[i]-mid >= 0 ){
                 sum += num[i]-mid;
             }
@@ -35,6 +33,7 @@ int main(){
             right = mid-1;
         }
     }
-    printf("%d\n",left-1);
+    printf("%lld\n",left-1);
+	return 0;
 }
 

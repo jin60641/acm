@@ -1,25 +1,45 @@
 #include<stdio.h>
-
+#include<vector>
+using namespace std;
+vector< vector<int> > vs;
 char s[1000010];
 char b[40];
 int length;
 int size;
+
+int bomb(){
+	for( vector< vector<int> >::iterator i = vs.begin(); i != vs.end(); ++i ){
+		for( vector<int>::iterator j = i->begin(); j != i->end(); ++j ){
+			s[*j] = '\0';
+		}
+	}
+	return 0;
+}
+
 int cmp(int start){
 	int i = start;
 	int correct = 0;
+	vector<int> v;
 	while( true ){
-		if( s[i] == '\0'){
-			++i;
-			continue;
-		}
 		if( s[i] == b[correct] ){
+			v.push_back(i);
 			++correct;
 			++i;
+		} else if( i != start && s[i] == b[0] ){
+			int skip = cmp(i);
+			if( skip > 0 ){
+				i += skip;
+				continue;
+			} else {
+				i -= skip;
+				return -(i-start);
+			}
 		} else {
-			return 0;
+			return -(i-start);
 		}
 		if( correct == size ){
-			return 1;
+			vs.push_back(v);
+			return i-start;
 		}
 	}
 }
@@ -41,45 +61,18 @@ int print(){
 	return 0;
 }
 
-int bomb(int start){
-	int i = start;
-	int cnt = 0;
-	while( i < length ){
-		if( s[i] == '\0'){
-			++i;
-			continue;
-		}
-		s[i] = '\0';
-		++cnt;
-		if( cnt == size ){
-			return 1;
-		}
-	}
-}
-
-int search(int start,int end){
-	int left = -1;
-	int right = -1;
-	for( int i = start; i < end; ++i ){
-		if( s[i] == b[0] && cmp(i) ){
-			if( left == -1 ){
-				left = i - size - 1;
-				if( left < 0 ){
-					left = 0;
-				}
+int search(){
+	for( int i = 0; i < length; ++i ){
+		int skip = cmp(i);
+		if( s[i] == b[0] ){
+			if( skip > 0 ){
+				i += (skip-1);
+			} else {
+				i -= (skip+1);
 			}
-			right = i + size + 1;
-			if( right >= length ){
-				right = length - 1;
-			}
-			bomb(i);
-			i += size;
 		}
 	}
-	if( left != -1 ){
-		//search(left,right);
-		search(0,0);
-	}
+	return 0;
 }
 
 int main(){
@@ -87,9 +80,8 @@ int main(){
 	scanf("%s",b);
 	for( size = 0; b[size] != '\0'; ++size );
 	for( length = 0; s[length] != '\0'; ++length );
-
-	int flag = 0;
-	search(0,length-1);
+	search();
+	bomb();
 	print();
 	return 0;
 }

@@ -2,45 +2,76 @@
 
 const int LEFT = 0;
 const int RIGHT = 1;
-int height = 0;
+int height;
+int keys[2][10010];
 
 struct node {
 	int parent;
 	int type;
-	int left; 
-	int right; 
+	int left;
+	int right;
 	int level;
+	int child[2];
+	int width;
 };
 
 node nodes[10010];
-int lefts[10010];
-int rights[10010];
 
-int checkLevel( int value, int level ){
+int check( int value, int level, int way ){
 	if( value == -1 ){
 		return 0;
 	}
-	if( height < level ){
-		height = level;
-	}
+	height = height<level?level:height;
 	nodes[value].level = level;
-	rights[level] = level;
-	if( lefts[level] == 0 ){
-		lefts[level] = level;
+	int multi;
+	if( way == LEFT ){
+		nodes[value].child[LEFT] = check( nodes[value].left, level+1, way );
+		nodes[value].child[RIGHT] = check( nodes[value].right, level+1, way );
+		multi = 1;
+	} else if( way == RIGHT ){
+		nodes[value].child[RIGHT] = check( nodes[value].right, level+1, way );
+		nodes[value].child[LEFT] = check( nodes[value].left, level+1, way );
+		multi = -1;
 	}
-	return checkLevel( nodes[value].left, level + 1 ) + checkLevel( nodes[value].right, level+1 ) + 1;
+	if( nodes[value].type == LEFT ){
+		nodes[value].width = ( nodes[value].child[RIGHT] + 1 ) * multi;
+	} else if( nodes[value].type == RIGHT ){
+		nodes[value].width = -( nodes[value].child[LEFT] + 1 ) * multi;
+	}
+	if( keys[way][level] == 0 ){
+		keys[way][level] = value;
+	} 
+	return nodes[value].child[LEFT] + nodes[value].child[RIGHT] + 1;
+}
+
+int dp(int value){
+	int flag = 0;
+	if( nodes[value].left > -1 ){
+		flag = 1;
+		nodes[nodes[value].left].width += nodes[value].width;
+		dp(nodes[value].left);
+	}
+	if ( nodes[value].right > -1 ){
+		flag = 1;
+		nodes[nodes[value].right].width += nodes[value].width;
+		dp(nodes[value].right);
+	}
+	if( flag == 0 ){
+		return 0;
+	}
+	return 0;
 }
 
 int main(){
+	node vroot = { 0,0,-1,-1,0,1,0,0 };
+	nodes[0] = vroot;
+
 	int N;
 	scanf("%d",&N);
-	node vroot = { 0,-1,-1,0 };
-	nodes[0] = vroot;
 	for( int i = 1; i <= N; ++i ){
-		node n = { 0,-1,-1,1 };
+		node n = { 0,0,-1,-1,1,0,0,0 };
 		nodes[i] = n;
 	}
-	
 	for( int i = 1; i <= N; ++i ){
 		int value,left,right;	
 		scanf("%d %d %d",&value,&left,&right);
@@ -55,14 +86,27 @@ int main(){
 	int root = 0;
 	for( int i = 1; i <= N; ++i ){
 		if( nodes[i].parent == 0 ){
+			nodes[i].type = LEFT;
+			nodes[0].left = i;
 			root = i;
 			break;
 		}
 	}
-	
-	printf("root is : %d\n",root);
-	printf("root's child is : %d\n",checkLevel(root,1));
-	printf("tree's height is : %d\n",height);
+	height = 0;
+	check( nodes[root].left, 2, LEFT );
+	check( nodes[root].right, 2, RIGHT );
+	dp(root);
+
+	int max = 0;
+	int max_i;
+	for( int i = 1; i <= height; ++i ){
+		int sum = nodes[keys[LEFT][i]].width + nodes[keys[RIGHT][i]].width + 1;
+		if( sum > max ){
+			max = sum;
+			max_i = i;
+		}
+	}
+	printf("%d %d\n",max_i,max);
 
 	return 0;
 }
