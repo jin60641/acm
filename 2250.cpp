@@ -2,22 +2,21 @@
 
 const int LEFT = 0;
 const int RIGHT = 1;
-int height;
-int keys[2][10010];
+int height;			
+int keys[2][10010];	
 
 struct node {
-	int parent;
-	int type;
-	int left;
-	int right;
-	int level;
-	int child[2];
-	int width;
+	int parent;		
+	int type;		
+	int left;		
+	int right;		
+	int level;		
+	int child[2];	
+	int width;		
 };
-
 node nodes[10010];
 
-int check( int value, int level, int way ){
+int check( int value, int level, int way ){		 
 	if( value == -1 ){
 		return 0;
 	}
@@ -45,27 +44,18 @@ int check( int value, int level, int way ){
 }
 
 int dp(int value){
-	int flag = 0;
 	if( nodes[value].left > -1 ){
-		flag = 1;
 		nodes[nodes[value].left].width += nodes[value].width;
 		dp(nodes[value].left);
 	}
 	if ( nodes[value].right > -1 ){
-		flag = 1;
 		nodes[nodes[value].right].width += nodes[value].width;
 		dp(nodes[value].right);
-	}
-	if( flag == 0 ){
-		return 0;
 	}
 	return 0;
 }
 
 int main(){
-	node vroot = { 0,0,-1,-1,0,1,0,0 };
-	nodes[0] = vroot;
-
 	int N;
 	scanf("%d",&N);
 	for( int i = 1; i <= N; ++i ){
@@ -86,8 +76,6 @@ int main(){
 	int root = 0;
 	for( int i = 1; i <= N; ++i ){
 		if( nodes[i].parent == 0 ){
-			nodes[i].type = LEFT;
-			nodes[0].left = i;
 			root = i;
 			break;
 		}
@@ -97,16 +85,18 @@ int main(){
 	check( nodes[root].right, 2, RIGHT );
 	dp(root);
 
-	int max = 0;
-	int max_i;
+	int max = 1;
+	int max_i = root;
 	for( int i = 1; i <= height; ++i ){
-		int sum = nodes[keys[LEFT][i]].width + nodes[keys[RIGHT][i]].width + 1;
+		int sum = nodes[keys[LEFT][i]].width + nodes[keys[RIGHT][i]].width;
+		if( keys[LEFT][i] > 0 && keys[RIGHT][i] > 0 ){
+			++sum;
+		}
 		if( sum > max ){
 			max = sum;
 			max_i = i;
 		}
 	}
 	printf("%d %d\n",max_i,max);
-
 	return 0;
 }
