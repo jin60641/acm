@@ -28,7 +28,7 @@ int main(){
 				left = mid+1;
 			}
 		}
-		int ltmp = left;
+		int ltmp = left-1;
 		right = ltmp;
 		left = 0;
 		while( left <= right ){
@@ -39,7 +39,7 @@ int main(){
 				left = mid+1;
 			}
 		}
-		printf("%d ",ltmp-right-1);
+		printf("%d ",ltmp-right);
 	}
 	printf("\n");
 	return 0;

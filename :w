@@ -1,0 +1,43 @@
+#include<stdio.h>
+
+char s[31];
+const int SMALL = 2;
+const int BIG = 3;
+int skip = 0;
+
+struct obj {
+	int skip;
+	int tot;
+};
+
+struct obj f(int start){
+	struct obj o = { 0, 0 };
+	for( int i = start; s[i] != '\0'; ++i ){
+		o.skip = i - start;
+		switch(s[start]){
+			case '(':
+				struct obj tmp = f(start+1);
+				o.tot += tmp.tot;
+				i += o.skip;
+				break;
+			case '[':
+				struct obj tmp = f(start+1);
+				o.tot += tmp.tot;
+				i += o.skip;
+				break;
+			case ')':
+				o.tot = SMALL*o.tot;
+				return o;
+				break;
+			case ']':
+				o.tot = BIG*o.tot;
+				return o;
+				break;
+		}
+	}
+}
+
+int main(){
+	scanf("%s",s);	
+	f(0,1);
+}
