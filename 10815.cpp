@@ -1,40 +1,40 @@
 #include<stdio.h>
 #include<algorithm>
+using namespace std;
 
 int main(){
-	int N;
-	int A[100001];
-	int M;
-	int B[100001];
-	int R[100001];
+	int N,M,mid,left,right;
+	int A[1000001];
+	int B[1000001];
 	scanf("%d",&N);
 	for( int i = 0; i < N; ++i ){
 		scanf("%d",&A[i]);
 	}
+	sort(A,A+N);
+
 	scanf("%d",&M);
-	for( int i = 0; i < N; ++i ){
+	for( int i = 0; i < M; ++i ){
 		scanf("%d",&B[i]);
 	}
-	int cnt = 0;
-	for( int i = 0; i < N; ++i ){
-		for( int j = 0; j < M; ++j ){
-			if( A[i] == B[j] ){
-				R[j] = 1;
-				++cnt;
+
+	for( int i = 0; i < M; ++i ){
+		left = 0;
+		right = N-1;
+		int flag = 0;
+		while( left <= right ){
+			mid = (left+right)/2;
+			if( A[mid] == B[i] ){
+				flag = 1;
 				break;
+			} else if( A[mid] > B[i] ){
+				right = mid-1;
+			} else if( A[mid] < B[i] ){
+				left = mid+1;
 			}
 		}
-		if( cnt == M ){
-			break;
-		}
+		printf("%d ",flag);
 	}
-	for( int i = 0; i < N; ++i ){
-		if(R[i] == 1){
-			printf("1\n");
-		} else {
-			printf("0\n");
-		}
-	}
-	
+	printf("\n");
+
 	return 0;
 }
