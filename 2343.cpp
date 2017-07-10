@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include<algorithm>
 
 int main(){
 	int N, M;
@@ -11,7 +10,6 @@ int main(){
 		scanf("%d",&a[i]);
 		left = a[i]>left?a[i]:left;
 	}
-	std::sort(a,a+N);
 	sum[0] = a[0];
 	for( int i = 1; i < N; ++i ){
 		sum[i] = sum[i-1]+a[i];
@@ -30,7 +28,7 @@ int main(){
 				tmp = i-1;
 				++cnt;
 			}
-			if( s <= mid && s > 0 && i+1 == N ){
+			if( s > 0 && i+1 == N ){
 				++cnt;
 			}
 			if( cnt > M ){
