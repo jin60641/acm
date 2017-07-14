@@ -3,6 +3,7 @@
 int s[12];
 int check[2000][6];
 int K = 0;
+int len = 0;
 int max;
 
 int c(int l, int r){
@@ -21,17 +22,17 @@ int c(int l, int r){
 
 int fill( int start, int weight, int index ){
 	int cnt = 0;
-	for( int i = start; i <= K-(6-weight); ++i ){
+	for( int i = start; i <= K-(len-weight); ++i ){
 		int tmp = cnt;
 		int l = K-i-1;
-		int r = 6-weight-1;
+		int r = len-weight-1;
 		int a = c(l,r);
 		if( a == 0 ){
 			continue;
 		}
 		cnt += a;
 		for( int j = tmp; j < cnt; ++j ){
-			check[j+index][weight] = s[i];
+			check[j+index][weight] = i;
 		}
 		fill(i+1,weight+1,tmp+index);
 	}
@@ -39,14 +40,10 @@ int fill( int start, int weight, int index ){
 }
 
 int main(){
+	len = 2;
+	scanf("%d",&K);
 	while(true){
-		for( int j = c(K,6)-1; j >= 0; --j ){
-			for( int i = 0; i < 6; ++i ){
-				check[j][i] = 0;
-			}
-		}
-		scanf("%d",&K);
-		max = c(K,6);
+		max = c(K,len);
 		if( K == 0 ){
 			return 0;
 		}
@@ -55,7 +52,7 @@ int main(){
 		}
 		fill(0,0,0);
 		for( int i = 0; i < max; ++i ){
-			for( int j = 0; j < 6; ++j ){
+			for( int j = 0; j < len; ++j ){
 				printf("%d ",check[i][j]);
 			}
 			printf("\n");
