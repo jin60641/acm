@@ -25,7 +25,6 @@ int c(int l, int r){
     return (int)(ret+1e-9);
 }
 
-
 int fill( int start, int weight, int index ){
     int cnt = 0;
     for( int i = start; i <= K-(end-weight); ++i ){
@@ -82,19 +81,27 @@ int main(){
 				tmp[p.open] = '!';
 				tmp[p.close] = '!';
 			}
+			std::string tmp2;
+			for( int k = 0; k < tmp.size(); ++k ){
+				if( tmp[k] == '!' ){
+					continue;
+				}
+				tmp2.push_back(tmp[k]);
+			}
 			++cnt;
-			result.push_back(tmp);
+			result.push_back(tmp2);
 		}
-		
 	}
 	std::sort(result.begin(),result.end());
-	std::reverse(result.begin(),result.end());
-	for( int i = 0; i < result.size(); i++ ){
-		for( int j = 0; j < result[i].length() ; ++j ){
-			if( result[i][j] != '!' ){
-				printf("%c", result[i][j]);
+	for( int i = 0; i < result.size(); ++i ){
+		int flag = 0;
+		for( int j = i+1; j < result.size(); ++j ){
+			if( result[i].compare(result[j]) == 0 ){
+				flag = 1;
 			}
+		} 
+		if( flag == 0 ){
+			printf("%s\n", result[i].c_str());
 		}
-		printf("\n");
 	}
 }

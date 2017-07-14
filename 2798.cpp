@@ -1,6 +1,4 @@
 #include<stdio.h>
-#include<algorithm>
-
 
 int main(){
 	int N,M;
@@ -9,20 +7,17 @@ int main(){
 	for( int i = 0; i < N; ++i ){
 		scanf("%d",&a[i]);
 	}
-	std::sort(a,a+N);
-	int left = 0;
-	int right = N-3;
-	int sum = 0;
-	while(left<=right){
-		int mid = (left+right)/2;
-		int tmp = a[mid] + a[mid+1] + a[mid+2];
-		if( tmp > M ){
-			right = mid-1;
-		} else {
-			sum = tmp;
-			left = mid+1;
+	int max = 0;
+	for( int i = 0; i < N-2; ++i ){
+		for( int j = i+1; j < N-1; ++j ){
+			for( int k = j+1; k < N; ++k ){
+				int sum = a[i] + a[j] + a[k];
+				if( sum > max && sum <= M ){
+					max = sum;
+				}
+			}
 		}
 	}
-	printf("%d\n",sum);
+	printf("%d\n",max);
 	return 0;
 }
