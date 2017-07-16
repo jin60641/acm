@@ -1,18 +1,17 @@
 #include<stdio.h>
-
+#include<queue>
 int alphabet = 52;
 int end = 26;
 int weight[52][52];
 int check[52];
-int q[52];
-int index = 1;
+std::queue<int> q;
 int path[52];
-int N;
 
 int reduce(int min){
 	int now = end-1;
 	while(now > 0){
 		weight[path[now]][now] -= min;
+		weight[now][path[now]] += min;
 		now = path[now];
 	}
 	return 0;
@@ -22,44 +21,43 @@ int clear(){
 	for( int i = 0; i < alphabet; ++i ){
 		path[i] = 0;
 		check[i] = 0;
-		q[i] = 0;
 	}
-	q[0] = 0;
-	index = 1;
+	while( q.size() > 0 ){
+		q.pop();
+	}
 	return 0;
 }
 
-int push(int num){
-	q[index++] = num;
-	return 0;
-}
-
-int bfs(int now){
-	int min = check[q[now]];
+int bfs(){
+	int now = q.front();
+	int min = check[now];
+	int flag = 0;
 	for( int i = 0; i < alphabet; ++i ){
-		int w = weight[q[now]][i];
-		if( w >= 1 && check[i] == 0 ){
-			path[i] = q[now];
-			push(i);
-			if( min == 0 || w < min ){
-				check[i] = w;
+		int w = weight[q.front()][i];
+		if( w >= 1  ){
+			int tmp;
+			if( now == 0 || min == 0 || w < min ){
+				tmp = w;
 			} else {
-				check[i] = min;
+				tmp = min;
 			}
-			if( i == end-1 ){
-				reduce(check[i]);
-				return check[i];
+			if( check[i] < tmp ){
+				q.push(i);
+				path[i] = now;
+				check[i] = tmp;
+				if( i == end-1 ){
+					reduce(check[i]);
+					break;
+				}
 			}
 		}
 	}
-	int result = 0;
-	if( now < alphabet && q[now+1] != 0 ){
-		result = bfs(now+1);
-	}
-	return result;
+	q.pop();
+	return 0;
 }
 
 int main(){
+	int N;
 	scanf("%d",&N);
 	for( int i = 0; i < N; ++i ){
 		char a,b;
@@ -79,13 +77,18 @@ int main(){
 	}
 	int sum = 0;
 	while( true ){
-		int result = bfs(0);
-		sum += result;
-		if( result == 0 ){
+		check[0] = 1000000;
+		q.push(0);
+		while( q.size() > 0 && q.front() < alphabet && check[end-1] == 0 ){
+			bfs();
+		}
+		if( check[end-1] == 0 ){
 			break;
 		}
+		sum += check[end-1];
 		clear();
 	}
 	printf("%d\n",sum);
+	return 0;
 }
 
