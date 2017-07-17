@@ -79,6 +79,7 @@ int main(){
 		}
 	} else {
 		while( result.size() > 0 ){
+            printf("%d ",result.front().cnt);
 			result.pop();
 		}
 	}
