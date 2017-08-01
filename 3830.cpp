@@ -14,11 +14,14 @@ long long int find(long long int a ){
 }
 
 long long int Union( long long int a, long long int b, long long int w ){
-	if( find(a) == find(b) ){
+	int ra = find(a); 
+	int rb = find(b);
+	if( ra == rb ){
 		return 0;
 	}
-	weight[find(a)] += weight[b] - w;
-	check[find(a)] = find(b);
+	check[ra] = rb;
+	weight[ra] = w + weight[b] - weight[a];
+	find(a); find(b);
 	return 1;
 }
 
@@ -49,7 +52,7 @@ int main(){
 				long long int A,B;
 				scanf("%lld %lld",&A,&B);
 				if( find(A) == find(B) ){
-					printf("%lld\n",weight[B]-weight[A]);
+					printf("%lld\n",weight[A]-weight[B]);
 				} else {
 					printf("UNKNOWN\n");
 				}
