@@ -48,7 +48,7 @@ int main(){
     for( int i = 0; i < v.size(); ++i ){
         Union(v[i]);
     }
-    int result = 0;
+    int result = weight[0];
     int flag = find(0);
     for( int i = 1; i < N; ++i ){
         result += weight[i];
