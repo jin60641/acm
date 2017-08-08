@@ -1,22 +1,30 @@
 #include<stdio.h>
+#include<list>
 
-int arr[20];
+
 int main(){
 	int N;
 	scanf("%d",&N);
-	int num = 1;
+	int a[10];
+	std::list<int> l;
 	for( int i = 0; i < N; ++i ){
-		int a;
-		scanf("%d",&a);
-		for( int j = a; j < N; ++j ){
-			if( arr[j] == 0 ){
-				arr[j] = num++;
-				break;
-			}
-		}
+		scanf("%d",&a[i]);
 	}
 	for( int i = 0; i < N; ++i ){
-		printf("%d ",arr[i]);
+		if( l.empty() || a[N-i-1] == l.size() ){
+			l.push_back(N-i);
+		} else if( a[N-i-1] == 0 ){
+			l.push_front(N-i);
+		} else {
+			std::list<int>::iterator it = l.begin();
+			for( int j = 0; j < a[N-i-1]; ++j ){
+				++it;
+			}
+			l.insert(it,N-i);
+		}
+	}
+	for( std::list<int>::iterator i = l.begin(); i != l.end(); ++i ){
+		printf("%d ",*i);
 	}
 	printf("\n");
 	return 0;
