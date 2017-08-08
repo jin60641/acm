@@ -1,64 +1,83 @@
 #include<stdio.h>
 #include<vector>
 #include<algorithm>
-int check[20];
-int weight[20];
-struct edge {
-    int l,r,w;
+const int X = 0;
+const int Y = 1;
+const int Z = 2;
+int check[100001];
+struct planet {
+	int x,y,z;
 };
-std::vector<edge> v;
-int cmp( edge a, edge b ){
-    return a.w<b.w;
+struct pair {
+	int number, value;
+};
+struct edge {
+	int l,r,w;
+};
+std::vector<planet> v;
+std::vector<edge> edges;
+std::vector<pair> pos[3];
+int abs( int a ){
+	return a>0?a:-a;
+}
+int cmp_edge( edge a, edge b ){
+	return a.w<b.w;
+}
+int cmp_pair( pair a, pair b ){
+	return a.value<b.value;
 }
 int find( int a ){
-    if( check[a] == a ){
-        return a;
-    }
-    int ra = find(check[a]);
-    weight[a] += weight[check[a]];
-    check[a] = ra;
-    return ra;
+	if( check[a] == a ){
+		return a;
+	}
+	int ra = find(check[a]);
+	check[a] = ra;
+	return ra;
 }
-int Union( edge e ){
-    int ra = find(e.l);
-    int rb = find(e.r);
-    if( ra == rb ){
-        return 0;
-    }
-    check[ra] = rb;
-    weight[ra] = e.w + weight[e.l] - weight[e.r];
-    find(e.l); find(e.r);
-    return 1;
+int Union( int a, int b ){
+	int ra = find(a);
+	int rb = find(b);
+	if( ra == rb ){
+		return 0;
+	}
+	check[ra] = rb;
+	return 1;
 }
 int main(){
-    int N;
-    scanf("%d",&N);
-    for( int i = 0; i < N; ++i ){
-        check[i] = i;
-        for( int j = 0; j < N; ++j ){
-            int a;
-            scanf("%d",&a);
-            if( i < j ){
-                edge e = { i, j, a };
-                v.push_back(e);
-            }
-        }
-    }
-    std::sort(v.begin(),v.end(),cmp);
-    for( int i = 0; i < v.size(); ++i ){
-        Union(v[i]);
-    }
-    int result = 0;
-    int flag = find(0);
-    for( int i = 1; i < N; ++i ){
-        result += weight[i];
-        if( find(i) != flag ){
-            flag = -1;
-            break;
-        }
-    }
-    printf("%d\n",flag==-1?-1:result);
-    return 0;
+	int N;
+	scanf("%d",&N);
+	for( int i = 0; i < N; ++i ){
+		check[i] = i;
+		int tmp[3];
+		for( int j = X; j <= Z; ++j ){
+			scanf("%d",&tmp[j]);
+		}
+		planet e = { tmp[0], tmp[1], tmp[2] };
+		v.push_back(e);
+		for( int j = X; j <= Z; ++j ){
+			pair p = { i, tmp[j] };
+			pos[j].push_back(p);
+		}
+	}
+	for( int i = X; i <= Z; ++i ){
+		std::sort(pos[i].begin(),pos[i].end(),cmp_pair);
+	}
+
+	for( int i = X; i <= Z; ++i ){
+		for( int j = 1; j < N; ++j ){
+			edge e = { pos[i][j-1].number, pos[i][j].number, abs(pos[i][j-1].value-pos[i][j].value) };
+			edges.push_back(e);
+		}
+	}
+	std::sort(edges.begin(),edges.end(),cmp_edge);
+	long long int result = 0;
+	for( int i = 0; i < edges.size(); ++i ){
+		if( Union( edges[i].l, edges[i].r ) == 1 ){
+			result += (long long int)edges[i].w;
+		}
+	}
+	printf("%lld\n",result);
+	return 0;
 }
 
 
