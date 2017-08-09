@@ -33,6 +33,8 @@ int push( int a ){
 	up(size-1);
 	return 0;
 }
+int cal(){
+}
 int pop(){
 	if( size == 0 ){
 		printf("0\n");
