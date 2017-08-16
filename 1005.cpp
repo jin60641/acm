@@ -8,17 +8,16 @@ int d[1001];
 int check[1001];
 
 int find( int now, int weight ){
-	if( weight < check[now] ){
-		return 0;
-	}
 	if( v[now].empty() ){
 		return weight;
+	} else if( check[now] == 0 ){
+		int ret = 0;
+		for( int i = 0; i < v[now].size(); ++i ){
+			ret = max ( ret, find( v[now][i], weight + d[v[now][i]] ) );
+		}
+		check[now] = ret;
 	}
-	int ret = 0;
-	for( int i = 0; i < v[now].size(); ++i ){
-		ret = max ( ret, find( v[now][i], weight + d[v[now][i]] ) );
-	}
-	return ret;
+	return check[now];
 }
 
 int main(){
@@ -27,6 +26,9 @@ int main(){
 	while( T-- ){
 		int N, K;
 		scanf("%d %d",&N,&K);
+		for( int i = 1; i <= N; ++i ){
+			check[i] = 0;
+		}
 		for( int i = 1; i <= N; ++i ){
 			scanf("%d",&d[i]);
 		}
