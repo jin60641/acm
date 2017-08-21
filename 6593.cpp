@@ -14,7 +14,7 @@ struct pair {
 
 struct cmp {
 	bool operator()(pair a, pair b){
-		return a.w < b.w;
+		return a.w > b.w;
 	}
 };
 std::priority_queue<pair,std::vector<pair>,cmp> pq;

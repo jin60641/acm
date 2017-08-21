@@ -47,6 +47,5 @@ int main(){
 		}
 		big.pop();
 	}
-
 	return 0;
 }
