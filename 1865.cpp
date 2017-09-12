@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<vector>
-const int INF = 2500*10000+1;
+int INF = 2500*10000+1;
 struct edge{
 	int S,E,T;
 };
@@ -12,13 +12,13 @@ int main(){
 	scanf("%d",&T);
 	while(T--){
 		int N,M,W;
-		int tmp[251][251];
+		int tmp[501][501];
+		scanf("%d %d %d",&N,&M,&W);
 		for( int i = 1; i <= N; ++i ){
 			for( int j = 1; j <= N; ++j ){
 				tmp[i][j] = INF;
 			}
 		}
-		scanf("%d %d %d",&N,&M,&W);
 		std::vector<edge> v;
 		for( int i = 0; i < M; ++i ){
 			int S,E,T;
@@ -41,14 +41,16 @@ int main(){
 		}
 		int flag = 0;
 		for( int i = 1; i <= N; ++i ){
-			int dist[251];
+			int dist[501];
 			for( int j = 1; j <= N; ++j ){
 				dist[j] = INF;
 			}
 			dist[i] = 0;
 			for( int j = 1; j <= N; ++j ){
+				int flag2 = 0;
 				for( int k = 0; k < v.size(); ++k ){
 					if( dist[v[k].S] != INF && dist[v[k].E] > dist[v[k].S] + v[k].T ){
+						flag2 = 1;
 						if( j == N ){
 							flag = 1;
 							break;
@@ -56,10 +58,9 @@ int main(){
 						dist[v[k].E] = dist[v[k].S] + v[k].T;
 					}
 				}
-				for( int k = 1; k <= 3; ++k ){
-					printf("%d ", dist[j]);
+				if( flag2 == 0 ) {
+					break;
 				}
-				printf("\n");
 			}
 			if( flag == 1 ){
 				break;
