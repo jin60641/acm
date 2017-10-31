@@ -11,13 +11,17 @@ void clear(){
 	}
 }
 
-int dfs(int now){
-	if( check[now] == 1 ){
-		return 1;
+int dfs(int now, int flag){
+	if( check[now] != 0 ){
+		if( check[now] != flag ){
+			return 1;
+		} else {
+			return 0;
+		}
 	}
-	check[now] = 1;
+	check[now] = flag;
 	for( int i = 0; i < v[now].size(); ++i ){
-		if( dfs( v[now][i] ) == 1 ){
+		if( dfs( v[now][i], flag==1?2:1 ) == 1 ){
 			return 1;
 		}
 	}
@@ -33,18 +37,17 @@ int main(){
 			int from, to;
 			scanf("%d %d",&from,&to);
 			v[from].push_back(to);
+			v[to].push_back(from);
 		}
 		int flag = 0;
 		for( int i = 1; i <= V; ++i ){
-			if( check[i] == 0 && dfs(i) == 1 ){
+			if(check[i] == 0 && dfs(i,1) ){
 				flag = 1;
-				printf("NO\n");
 				break;
 			}
 		}
-		if( flag == 0 ){
-			printf("YES\n");
-		}
+		printf("%s\n",flag?"NO":"YES");
+		clear();
 	}
 	return 0;
 }
