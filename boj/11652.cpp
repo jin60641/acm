@@ -12,7 +12,7 @@ int main(){
 		v.push_back(a);
 	}
 	std::sort(v.begin(),v.end());
-	long long int result = 0;
+	long long int result = 1;
 	long long int cnt = 1;
 	long long int n = v[0];
 	for( int i = 1; i < v.size(); ++i ){
@@ -24,6 +24,8 @@ int main(){
 		if( cnt > result ){
 			result = cnt;
 			n = v[i];
+		} else if( cnt == result ){
+			n = v[i] < n ? v[i] : n;
 		}
 	}
 	printf("%lld\n",n);
