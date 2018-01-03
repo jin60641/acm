@@ -2,15 +2,15 @@
 #include<vector>
 #include<stack>
 #include<algorithm>
-int INF = 10001;
+const int INF = 10001;
 int min( int a, int b ){
 	return a<b?a:b;
 }
 bool cmp( int a, int b ){
 	return a<b;
 }
-bool cmp2( std::vector<int> a, std::vector<int> b ){
-	return a[0] < b[0];
+bool cmpV( std::vector<int> a, std::vector<int> b ){
+	return cmp(a[0],b[0]);
 }
 std::vector<int> v[10001];
 std::vector< std::vector<int> > scc;
@@ -53,7 +53,7 @@ int main(){
 	for( int i = 0; i < scc.size(); ++i ){
 		std::sort(scc[i].begin(),scc[i].end(),cmp);
 	}
-	std::sort(scc.begin(),scc.end(),cmp2);
+	std::sort(scc.begin(),scc.end(),cmpV);
 	for( int i = 0; i < scc.size(); ++i ){
 		for( int j = 0; j < scc[i].size(); ++j ){
 			printf("%d ",scc[i][j]);
