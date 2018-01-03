@@ -3,6 +3,7 @@
 #include<stack>
 #include<algorithm>
 const int INF = 10001;
+int INF = 10001;
 int min( int a, int b ){
 	return a<b?a:b;
 }
@@ -11,7 +12,6 @@ bool cmp( int a, int b ){
 }
 bool cmpV( std::vector<int> a, std::vector<int> b ){
 	return cmp(a[0],b[0]);
-}
 std::vector<int> v[10001];
 std::vector< std::vector<int> > scc;
 std::stack<int> s;
