@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<vector>
 #include<stack>
-#include<queue>
 using std::vector;
 const int MAX_N = 100001;
 vector<int> v[MAX_N];
@@ -15,25 +14,35 @@ int min(int a, int b){
 }
 int dfs(int now, int from){
 	check[now] = ++num;
-	int ret = MAX_N;
+	int ret = check[now];
+	int child = 0;
 	for (int i = 0; i < v[now].size(); ++i){
 		int next = v[now][i];
-		if (check[next]){
-			ret = min(ret, check[next]);
-		}
-		else {
-			int d = dfs(next, now);
-			ret = min(ret, d);			
-			if (ret != MAX_N && d >= check[now] && result[now] == 0){
-				result[now] = 1;
-				++cnt;
+		if( check[next] ){
+			if( next != from && check[next] < check[now] ){
+				ret = min( ret, check[next] );
 			}
+		} else {
+			++child;
+			int d = dfs(next,now);
+			if( d >= check[now] ){
+				result[now] = 1;
+			}
+			ret = min( ret, d );
 		}
 	}
-	if (ret == MAX_N) ret = check[now];
+	if( ( from == 0 && child >= 2 ) ) {
+		result[now] = 1;
+	} else if (ret == MAX_N) {
+		ret = check[now];
+	}
+	if( result[now] ){
+		++cnt;
+	}
 	if (ret == check[now]) 	ret = check[from];
 	return ret;
 }
+
 int main(){
 	scanf("%d %d", &N, &M);
 	for (int i = 0; i < M; ++i){
@@ -43,7 +52,7 @@ int main(){
 		v[b].push_back(a);
 	}
 	for (int i = 1; i <= N; ++i) {
-		if (check[i] == 0) dfs(i, 0);
+		if (check[i] == 0 ) dfs(i, 0);
 	}
 	printf("%d\n", cnt);
 	for (int i = 1; i <= N; ++i){
