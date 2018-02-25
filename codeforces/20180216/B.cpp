@@ -5,19 +5,19 @@ int cnt[10][1000006];
 int dp[1000006];
 int f(int n){
 	int tmp = n;
-	int a = 1;
+	int ret = 1;
 	while( tmp > 0 ){
 		if( dp[tmp] ){
-			a *= dp[tmp];
+			ret *= dp[tmp];
 			break;
 		}
 		if( tmp%10 != 0 ){
-			a *= tmp%10;
+			ret *= tmp%10;
 		}
 		tmp /= 10;
 	}
-	dp[n] = a;
-	return dp[n];
+	dp[n] = ret;
+	return ret;
 }
 
 int g(int n){
