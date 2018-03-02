@@ -33,11 +33,11 @@ int main(){
 			dp[1<<i] = 0;
 		}
 	}
-	if( cnt == 0 ){
-		printf("-1\n");
-		return 0;
-	} else if( cnt >= P ){
+	if( cnt >= P ){
 		printf("0\n");
+		return 0;
+	} else if( cnt == 0 ){
+		printf("-1\n");
 		return 0;
 	}
 	for( int i = 0; i < bit; ++i ){
