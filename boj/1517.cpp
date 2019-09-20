@@ -1,72 +1,46 @@
 #include<stdio.h>
-#include<stdlib.h>
 #include<algorithm>
-using namespace std;
 
-int N; 
-long long int cnt = 0; 
-int A[500001]; 
+const int MAX_N = 500001;
 
-int *swap(int[], int[], int, int); 
+int N, A[MAX_N];
 
-int* cut(int left,int right){ 
-	int mid = (left+right)/2;
-	if( left == right ){       
-		int *B = (int *)malloc(sizeof(int));    
-		*B = A[right];
-		return B;
-	} else {                   
-		return swap( cut(left,mid), cut(mid+1,right), left, right );  
-	}
+
+long long int merge(long long int start, long long int end) {
+  int length = end - start + 1;
+  if (length == 1) {
+    return 0;
+  }
+  if (length == 2 && A[start] > A[end]) {
+    std::sort(A + start, A + end + 1);
+    return 1;
+  }
+  long long int mid = (start + end) / 2;
+  long long int left = merge(start, mid);
+  long long int right = merge(mid + 1, end);
+  long long int cnt = 0;
+
+  int i, j;
+  i = start;
+  j = mid+1;
+  
+  while(i <= mid && j <= end) {
+    if (A[i] > A[j]) {
+      cnt += mid + 1 - i;
+      ++j;
+    } else {
+      ++i;
+    }
+  }
+  std::sort(A + start, A + end + 1);
+  return left + right + cnt;
 }
 
-int* swap(int C[],int D[],int left,int right){
-	if( left == right ){ 
-		return A+left;
-	}
-	int mid = (left+right)/2;
-	int Csize = mid-left + 1;
-	int Dsize = right-(mid+1) + 1;
-
-	int *B;
-	B = (int *)malloc(sizeof(int)*(Csize+Dsize)); 
-	int i = 0;								 
-	int j = 0; 								
-	int a, b;  								
-	int jcnt = 0;						
-	while( i < Csize || j < Dsize ){      
-		if( j == Dsize ){               
-			a = C[i];
-			B[i+j] = a;
-			++i;
-		} else if( i == Csize ){		
-			b = D[j];
-			B[i+j] = b;
-			++j;
-		} else {						
-			a = C[i];
-			b = D[j];
-			if( a < b ){
-				B[i+j] = a;
-				++i;
-			} else if( b < a ){			
-				B[i+j] = b;
-				cnt += (Csize-i);
-				jcnt++;
-				++j;
-			}
-		}
-	}
-	free(C); free(D); 		
-	return B;				 
-}
-
-int main(){
-	scanf("%d",&N);
-	for( int i = 0; i < N; ++i ){
-		scanf("%d",&A[i]);
-	}
-	cut(0,N-1);
-	printf("%lld",cnt);
-	return 0;
+int main() {
+  scanf("%d", &N);
+  for (long long int i = 1; i <= N; ++i) {
+    scanf("%d", &A[i]);
+  }
+  printf("%lld\n", merge(1, N));
+  return 0;
 }

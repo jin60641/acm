@@ -3,20 +3,34 @@
 #include<queue>
 const int INF = 5000000;
 struct pair {
+  int n, w;
+};
+
+struct edge {
 	int to, w;
 };
-std::queue<int> q;
-std::vector<pair> v[20001];
+struct cmp {
+    bool operator()(pair a, pair b){
+        return a.w < b.w;
+    }
+};
+std::priority_queue<pair,std::vector<pair>,cmp> pq;
+std::vector<edge> v[20001];
 int result[20001];
 int bfs(){
-	int now = q.front();
-	for( int i = 0; i < v[now].size(); ++i ){
-		if( result[v[now][i].to] > result[now] + v[now][i].w ){
-			result[v[now][i].to] = result[now] + v[now][i].w;
-			q.push(v[now][i].to);
+	pair now = pq.top();
+  if (now.w > result[now.n]) {
+    return 0;
+  }
+	pq.pop();
+	for( int i = 0; i < v[now.n].size(); ++i ){
+    edge n = v[now.n][i];
+		if( result[n.to] > now.w + n.w ){
+			result[n.to] = now.w + n.w;
+      pair p = { n.to, result[n.to] };
+			pq.push(p);
 		}
 	}
-	q.pop();
 	return 0;
 }
 int main(){
@@ -26,15 +40,16 @@ int main(){
 	for( int i = 0; i < E; ++i ){
 		int a,b,w;
 		scanf("%d %d %d",&a,&b,&w);
-		pair p = { b, w };
+		edge p = { b, w };
 		v[a].push_back(p);
 	}
 	for( int i = 1; i<= V; ++i ){
 		result[i] = INF;
 	}
-	q.push(K);
+  pair s = { K, 0 };
+	pq.push(s);
 	result[K] = 0;
-	while( q.size() > 0 ){
+	while( pq.size() > 0 ){
 		bfs();
 	}
 	for( int i = 1; i <= V; ++i ){

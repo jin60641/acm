@@ -5,12 +5,12 @@ int Y,X,H;
 struct pos {
 	int y,x;
 };
-std::vector<pos> v[501][501];
+std::vector<pos> v[503][503];
 std::queue<pos> q;
-int a[501][501];
-int in[501][501];
-int cnt[501][501];
-int check[501][501];
+int a[503][503];
+int in[503][503];
+int cnt[503][503];
+int check[503][503];
 
 void swap( int &a, int &b ){
 	int tmp = a;
